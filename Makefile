@@ -1,7 +1,6 @@
 build:
 	gcc -Wfatal-errors \
 	./src/*.cpp \
-	-std=c99 \
 	-lmingw32 \
 	-lgdi32 \
 	-lkernel32 \
