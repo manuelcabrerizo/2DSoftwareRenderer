@@ -1,10 +1,11 @@
 build:
 	gcc -Wfatal-errors \
 	./src/*.cpp \
-	-L"user32.lib" \
-	-L"Gdi32.lib" \
+	-std=c99 \
 	-lmingw32 \
 	-lgdi32 \
+	-lkernel32 \
+	-luser32 \
 	-lm \
 	-o 2Drenderer.exe
 run:

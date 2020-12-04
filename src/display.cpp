@@ -262,7 +262,6 @@ texture_t LoadBMP(const char* filename)
     FILE* file = fopen(filename, "rb");
     if(file != NULL)
     {
-        //printf("Load Success\n");
         fread(&header, sizeof(header), 1, file);
         texture.pixels = (uint32_t*)malloc(sizeof(uint32_t) * header.width * header.height);
         fseek(file, header.bitmapOffset, SEEK_SET);
@@ -270,9 +269,11 @@ texture_t LoadBMP(const char* filename)
         texture.width = header.width;
         texture.height = header.height;
     }
+    else
+    {
+        printf("cannot read the file %s\n", filename);
+    }
     fclose(file);
-    free(file);
-   
     return(texture);
 }
 

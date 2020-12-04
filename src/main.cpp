@@ -234,7 +234,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
             lastCounter = endCounter;
         }
 
-        free(backBuffer);
+        // free back buffer
     }
     return(0); 
 }
