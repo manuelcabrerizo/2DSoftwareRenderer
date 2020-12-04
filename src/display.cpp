@@ -263,7 +263,7 @@ texture_t LoadBMP(const char* filename)
     if(file != NULL)
     {
         //printf("Load Success\n");
-        fread(&header, sizeof(&header), 8, file);
+        fread(&header, sizeof(header), 1, file);
         texture.pixels = (uint32_t*)malloc(sizeof(uint32_t) * header.width * header.height);
         fseek(file, header.bitmapOffset, SEEK_SET);
         fread(texture.pixels, sizeof(uint32_t), header.width * header.height, file);

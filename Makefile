@@ -1,4 +1,4 @@
-uild:
+build:
 	gcc -Wfatal-errors \
 	./src/*.cpp \
 	-L"user32.lib" \
