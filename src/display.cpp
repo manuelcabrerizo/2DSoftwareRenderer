@@ -289,14 +289,33 @@ win32BackBuffer_t* CreateBackBuffer(void)
 
 void DrawTileMap(vec2_t tiles[][16], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer)
 {
+    int posX = tileInfo.x;
+    int posY = tileInfo.y;
     for(int y = 9; y > 0; y--)
     {
         for(int x = 0; x < 16; x++)
         {
-            tileInfo.x = (tileInfo.width * x) * scale;
-            tileInfo.y = (tileInfo.height * (9 - y)) * scale;
+            tileInfo.x = ((tileInfo.width * x) * scale) + posX;
+            tileInfo.y = ((tileInfo.height * (9 - y)) * scale) + posY;
             tileInfo.row =  tiles[y - 1][x].x;
             tileInfo.column = tiles[y - 1][x].y;
+            DrawFrameTexture(tileInfo, scale, texture, backBuffer);
+        }
+    }    
+}
+
+void DrawTileMapInt(int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer)
+{
+    int posX = tileInfo.x;
+    int posY = tileInfo.y;
+    for(int y = 20; y > 0; y--)
+    {
+        for(int x = 0; x < 30; x++)
+        {
+            tileInfo.x = ((tileInfo.width * x) * scale) + posX;
+            tileInfo.y = ((tileInfo.height * (20 - y)) * scale) + posY;
+            tileInfo.row =  tiles[((y - 1) * 30) + x] % 6;
+            tileInfo.column = tiles[((y - 1) * 30) + x] / 6;
             DrawFrameTexture(tileInfo, scale, texture, backBuffer);
         }
     }    
