@@ -69,7 +69,6 @@ void DrawRect(int xPos, int yPos, int width, int height, uint32_t color, win32Ba
 void DrawTexture(int xPos, int yPos, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawTextureScale(int xPos, int yPos, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawFrameTexture(rect_t srcRect, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
-void DrawTileMap(vec2_t tiles[][16], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawTileMapInt(int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawString(const char* message, int posX, int posY, texture_t texture, win32BackBuffer_t* backBuffer);
 
