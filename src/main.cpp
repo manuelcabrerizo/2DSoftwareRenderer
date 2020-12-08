@@ -253,8 +253,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
             timePass += (MSPerFrame / 40.0f);               
             lastCounter = endCounter;
         }
-
-        // free back buffer
+        VirtualFree(backBuffer->memory, 0, MEM_RELEASE);
     }
     return(0); 
 }
