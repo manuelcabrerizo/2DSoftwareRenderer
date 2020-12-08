@@ -299,6 +299,10 @@ void DrawTileMapInt(int tiles[], rect_t tileInfo, int scale, texture_t texture, 
             tileInfo.y = ((tileInfo.height * (20 - y)) * scale) + posY;
             tileInfo.row =  tiles[((y - 1) * 30) + x] % 6;
             tileInfo.column = tiles[((y - 1) * 30) + x] / 6;
+            if(tileInfo.row == 0 && tileInfo.column == 0)
+            {
+                continue;
+            }
             DrawFrameTexture(tileInfo, scale, texture, backBuffer);
         }
     }    
