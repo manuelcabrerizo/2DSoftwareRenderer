@@ -237,6 +237,7 @@ void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
     DrawString("POKEMON SOUL SILVER", 0, windowHeight - 16, fontTexture, backBuffer);
     DrawString("AGUANTE LUGIA PAPA", 0, windowHeight - 32, fontTexture, backBuffer);
     DrawString("HOO HOO SE LA COMEEE", 0, windowHeight - 48, fontTexture, backBuffer);
+    DrawString("MANUTO", mago.x - 16, mago.y + 64, fontTexture, backBuffer);
     ClearBackBuffer(0xFF004400, backBuffer, hwnd);
 }
 
