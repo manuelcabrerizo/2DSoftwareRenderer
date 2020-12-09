@@ -220,8 +220,31 @@ void InputHandler(HWND hwnd)
 void Update(void)
 {
     mago.row = (int)timePass % magoNumFrames;
+    
     tileInfo.x += (mago.x - magoPos.x);
+    if(tileInfo.x > 0 || mago.x < (windowWidth / 2) - 32)
+    {
+        tileInfo.x = 0;
+        mago.x -= (mago.x - magoPos.x);
+    }
+    else if(tileInfo.x + (30 * (16 * 4)) < windowWidth || mago.x > (windowWidth / 2) - 32)
+    {
+        tileInfo.x = windowWidth - (30 * (16 * 4)); 
+        mago.x -= (mago.x - magoPos.x);
+    }
+
     tileInfo.y += (mago.y - magoPos.y);
+    
+    if(tileInfo.y > 0 || mago.y < (windowHeight / 2) - 32)
+    {
+        tileInfo.y = 0;
+        mago.y -= (mago.y - magoPos.y);
+    }
+    else if(tileInfo.y + (20 * (16 * 4)) < windowHeight || mago.y > (windowHeight / 2) - 32)
+    {
+        tileInfo.y = windowHeight - (20 * (16 * 4)); 
+        mago.y -= (mago.y - magoPos.y);
+    }
 }
 
 void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
@@ -236,7 +259,7 @@ void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
     DrawTileMapInt(map.topLayer, tileInfo, 4, tilesheetTexture, backBuffer);
     DrawString("POKEMON SOUL SILVER", 0, windowHeight - 16, fontTexture, backBuffer);
     DrawString("AGUANTE LUGIA PAPA", 0, windowHeight - 32, fontTexture, backBuffer);
-    DrawString("HOO HOO SE LA COMEEE", 0, windowHeight - 48, fontTexture, backBuffer);
+    DrawString("HO OH SE LA COMEEE", 0, windowHeight - 48, fontTexture, backBuffer);
     DrawString("MANUTO", mago.x - 16, mago.y + 64, fontTexture, backBuffer);
     ClearBackBuffer(0xFF004400, backBuffer, hwnd);
 }
