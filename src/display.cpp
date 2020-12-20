@@ -287,7 +287,7 @@ win32BackBuffer_t* CreateBackBuffer(void)
     return &backBuffer;
 }
 
-void DrawTileMapInt(int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer)
+void DrawTileMapInt(int columns, int rows, int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer)
 {
     int posX = tileInfo.x;
     int posY = tileInfo.y;
@@ -297,8 +297,8 @@ void DrawTileMapInt(int tiles[], rect_t tileInfo, int scale, texture_t texture, 
         {
             tileInfo.x = ((tileInfo.width * x) * scale) + posX;
             tileInfo.y = ((tileInfo.height * (20 - y)) * scale) + posY;
-            tileInfo.row =  tiles[((y - 1) * 30) + x] % 6;
-            tileInfo.column = tiles[((y - 1) * 30) + x] / 6;
+            tileInfo.row =  tiles[((y - 1) * 30) + x] % columns;
+            tileInfo.column = tiles[((y - 1) * 30) + x] / rows;
             if(tileInfo.row == 0 && tileInfo.column == 0)
             {
                 continue;
@@ -336,5 +336,71 @@ void DrawString(const char* message, int posX, int posY, texture_t texture, win3
         index++;
     }
 
- }
+}
+
+void LoadMapFromFile(const char* filePath, tileMap_t* map)
+{
+    FILE* file = fopen(filePath, "r");
+    if(file != NULL)
+    {
+        char line[1024];
+        int incBottom = 0;
+        int incTop = 0;
+        int incColitions = 0;
+
+        while(fgets(line, 1024, file) != NULL)
+        {
+            if(strncmp(line, "1:", 2) == 0)
+            { 
+                sscanf(line, "1: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", 
+                &map->bottomLayer[0 + incBottom],    &map->bottomLayer[1 + incBottom],  &map->bottomLayer[2 + incBottom],
+                &map->bottomLayer[3 + incBottom],    &map->bottomLayer[4 + incBottom],  &map->bottomLayer[5 + incBottom],
+                &map->bottomLayer[6 + incBottom],    &map->bottomLayer[7 + incBottom],  &map->bottomLayer[8 + incBottom],
+                &map->bottomLayer[9 + incBottom],    &map->bottomLayer[10 + incBottom], &map->bottomLayer[11 + incBottom],
+                &map->bottomLayer[12 + incBottom],   &map->bottomLayer[13 + incBottom], &map->bottomLayer[14 + incBottom],
+                &map->bottomLayer[15 + incBottom],   &map->bottomLayer[16 + incBottom], &map->bottomLayer[17 + incBottom],
+                &map->bottomLayer[18 + incBottom],   &map->bottomLayer[19 + incBottom], &map->bottomLayer[20 + incBottom],
+                &map->bottomLayer[21 + incBottom],   &map->bottomLayer[22 + incBottom], &map->bottomLayer[23 + incBottom],
+                &map->bottomLayer[24 + incBottom],   &map->bottomLayer[25 + incBottom], &map->bottomLayer[26 + incBottom],
+                &map->bottomLayer[27 + incBottom],   &map->bottomLayer[28 + incBottom], &map->bottomLayer[29 + incBottom]);
+                incBottom += 30; 
+            }   
+            if(strncmp(line, "2:", 2) == 0)
+            {
+                sscanf(line, "2: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", 
+                &map->topLayer[0 + incTop],  &map->topLayer[1 + incTop],  &map->topLayer[2 + incTop],
+                &map->topLayer[3 + incTop],  &map->topLayer[4 + incTop],  &map->topLayer[5 + incTop],
+                &map->topLayer[6 + incTop],  &map->topLayer[7 + incTop],  &map->topLayer[8 + incTop],
+                &map->topLayer[9 + incTop],  &map->topLayer[10 + incTop], &map->topLayer[11 + incTop],
+                &map->topLayer[12 + incTop], &map->topLayer[13 + incTop], &map->topLayer[14 + incTop],
+                &map->topLayer[15 + incTop], &map->topLayer[16 + incTop], &map->topLayer[17 + incTop],
+                &map->topLayer[18 + incTop], &map->topLayer[19 + incTop], &map->topLayer[20 + incTop],
+                &map->topLayer[21 + incTop], &map->topLayer[22 + incTop], &map->topLayer[23 + incTop],
+                &map->topLayer[24 + incTop], &map->topLayer[25 + incTop], &map->topLayer[26 + incTop],
+                &map->topLayer[27 + incTop], &map->topLayer[28 + incTop], &map->topLayer[29 + incTop]);
+                incTop += 30;           
+            }
+            if(strncmp(line, "3:", 2) == 0)
+            {
+                sscanf(line, "3: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", 
+                &map->colitions[0 + incColitions],  &map->colitions[1 + incColitions],  &map->colitions[2 + incColitions],
+                &map->colitions[3 + incColitions],  &map->colitions[4 + incColitions],  &map->colitions[5 + incColitions],
+                &map->colitions[6 + incColitions],  &map->colitions[7 + incColitions],  &map->colitions[8 + incColitions],
+                &map->colitions[9 + incColitions],  &map->colitions[10 + incColitions], &map->colitions[11 + incColitions],
+                &map->colitions[12 + incColitions], &map->colitions[13 + incColitions], &map->colitions[14 + incColitions],
+                &map->colitions[15 + incColitions], &map->colitions[16 + incColitions], &map->colitions[17 + incColitions],
+                &map->colitions[18 + incColitions], &map->colitions[19 + incColitions], &map->colitions[20 + incColitions],
+                &map->colitions[21 + incColitions], &map->colitions[22 + incColitions], &map->colitions[23 + incColitions],
+                &map->colitions[24 + incColitions], &map->colitions[25 + incColitions], &map->colitions[26 + incColitions],
+                &map->colitions[27 + incColitions], &map->colitions[28 + incColitions], &map->colitions[29 + incColitions]);
+                incColitions += 30;           
+            }        
+        }     
+    }
+    else
+    {
+        printf("cannot read the file %s\n", filePath);
+    }
+    fclose(file);
+}
 

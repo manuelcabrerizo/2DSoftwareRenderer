@@ -55,6 +55,13 @@ typedef struct
     int column;
 } rect_t;
 
+typedef struct 
+{
+    int bottomLayer[600];
+    int topLayer[600];
+    int colitions[600];
+} tileMap_t;
+
 HWND Win32CreateWindow(const char* windowName, int width, int height, HINSTANCE hInstance);
 void Win32InputHandler(HWND hwnd);
 void Win32SetBackBuffer(win32BackBuffer_t* backBuffer, HWND hwnd);
@@ -69,8 +76,10 @@ void DrawRect(int xPos, int yPos, int width, int height, uint32_t color, win32Ba
 void DrawTexture(int xPos, int yPos, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawTextureScale(int xPos, int yPos, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawFrameTexture(rect_t srcRect, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
-void DrawTileMapInt(int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
+void DrawTileMapInt(int columns, int rows, int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawString(const char* message, int posX, int posY, texture_t texture, win32BackBuffer_t* backBuffer);
+void LoadMapFromFile(const char* filePath, tileMap_t* map);
+
 
 #endif
 

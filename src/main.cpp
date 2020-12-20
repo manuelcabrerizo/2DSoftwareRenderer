@@ -2,6 +2,7 @@
 #include <stdlib.h>     
 #include <time.h>
 #include <stdio.h>
+#include <string.h>
 
 texture_t backgroundTexture;
 texture_t magoTexture;
@@ -22,83 +23,10 @@ vec2_t magoPos;
 rect_t mago;
 rect_t tileInfo;
 
-int bottomLayer[600] = {
-        29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29,
-        29, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 10, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 17, 4,  15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 29,
-        29, 9,  10, 10, 10, 10, 10, 10, 10, 10, 11, 29,  9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 29,
-        29, 3,  4,  4,  4,  4,  4,  4,  4,  4,  5,  29,  3,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  5,  29
-};
-
-int colitions[600] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-};
-
-int topLayer[600] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
-
-typedef struct 
-{
-    int* bottomLayer;
-    int* topLayer;
-    int* colitions;
-} tileMap_t;
-
-tileMap_t map;
+tileMap_t map0;
+tileMap_t map1;
+tileMap_t map2;
+tileMap_t* actualMap;
 
 bool PlayerCanMove(int x, int y)
 {
@@ -112,7 +40,7 @@ bool PlayerCanMove(int x, int y)
         int x2 = 0;
         for(int x = 0; x < 30; x++)
         {
-            tiles[(y2 * 30) + x2] = map.colitions[((y - 1) * 30) + x];
+            tiles[(y2 * 30) + x2] = actualMap->colitions[((y - 1) * 30) + x];
             x2++;
         }
         y2++;   
@@ -130,9 +58,41 @@ bool PlayerCanMove(int x, int y)
     return true;
 }
 
+bool ChangeMap(int x, int y)
+{
+    x -= tileInfo.x;
+    y -= tileInfo.y;
+
+    int tiles[600];
+    int y2 = 0;
+    for(int y = 20; y > 0; y--)
+    {
+        int x2 = 0;
+        for(int x = 0; x < 30; x++)
+        {
+            tiles[(y2 * 30) + x2] = actualMap->bottomLayer[((y - 1) * 30) + x];
+            x2++;
+        }
+        y2++;   
+    }
+
+    int tile1 = tiles[((y / 64) * 30) + ((x + 20) / 64)];
+    int tile2 = tiles[((y / 64) * 30) + ((x + 40) / 64)];
+
+    if((tile1 == 2) || (tile2 == 2)) 
+    {
+        return true;
+    }
+    return false;
+}
+
 
 void Init(void)
 {
+    tilesheetTexture = LoadBMP("./assets/10x10.bmp");
+    magoTexture = LoadBMP("./assets/mago.bmp");
+    fontTexture = LoadBMP("./assets/font23.bmp");
+
     mago.x = (windowWidth / 2) - 32;
     mago.y = (windowHeight / 2) - 32;
     mago.width = 16;
@@ -144,14 +104,17 @@ void Init(void)
     magoScale = 4;
     magoPos.x = (windowWidth / 2) - 32;
     magoPos.y = (windowHeight / 2) - 32;
+    magoNumFrames = 1;
 
     tileInfo.x = 0;
     tileInfo.y = 0;
     tileInfo.width = 16;
     tileInfo.height = 16;
-    map.bottomLayer = bottomLayer;
-    map.topLayer = topLayer;
-    map.colitions = colitions;
+
+    LoadMapFromFile("./assets/maps/test1.map", &map0);
+    LoadMapFromFile("./assets/maps/mapa1.map", &map1);
+    LoadMapFromFile("./assets/maps/mapa2.map", &map2);
+    actualMap = &map0;
 }
 
 void InputHandler(HWND hwnd)
@@ -163,6 +126,21 @@ void InputHandler(HWND hwnd)
     
     magoIncX = magoPos.x;
     magoIncY = magoPos.y;
+
+
+    if(KeyDown(0x31))
+    {
+        actualMap = &map0;
+    }
+    if(KeyDown(0x32))
+    {
+        actualMap = &map1;
+    }
+    if(KeyDown(0x33))
+    {
+        actualMap = &map2;
+    }
+
 
     if(KeyDown(VK_UP))
     {
@@ -181,18 +159,19 @@ void InputHandler(HWND hwnd)
         magoIncX += 3.0f;
         mago.column = 2;
         magoNumFrames = 6;
-    }
+    } 
     else if(KeyDown(VK_LEFT))
     {
         magoIncX -= 3.0f;
         mago.column = 3;
         magoNumFrames = 6;
     }
-    else
+
+    if(!KeyDown(VK_UP) && !KeyDown(VK_DOWN) && !KeyDown(VK_RIGHT) && !KeyDown(VK_LEFT))
     {
         magoNumFrames = 1;
     }
-
+    
     if(magoIncY + mago.height * magoScale >= windowHeight)
     {
         magoIncY = windowHeight - mago.height * magoScale;
@@ -220,59 +199,63 @@ void InputHandler(HWND hwnd)
 void Update(void)
 {
     mago.row = (int)timePass % magoNumFrames;
-    
+    //tileInfo.x += (mago.x - magoPos.x);
+    //tileInfo.y += (mago.y - magoPos.y);
+     
     tileInfo.x += (mago.x - magoPos.x);
+    tileInfo.y += (mago.y - magoPos.y);
     if(tileInfo.x > 0 || mago.x < (windowWidth / 2) - 32)
     {
         tileInfo.x = 0;
         mago.x -= (mago.x - magoPos.x);
     }
-    else if(tileInfo.x + (30 * (16 * 4)) < windowWidth || mago.x > (windowWidth / 2) - 32)
+    
+    if(tileInfo.x + (30 * (16 * 4)) < windowWidth || mago.x > (windowWidth / 2) + 32)
     {
         tileInfo.x = windowWidth - (30 * (16 * 4)); 
         mago.x -= (mago.x - magoPos.x);
     }
 
-    tileInfo.y += (mago.y - magoPos.y);
-    
+     
     if(tileInfo.y > 0 || mago.y < (windowHeight / 2) - 32)
     {
         tileInfo.y = 0;
         mago.y -= (mago.y - magoPos.y);
     }
-    else if(tileInfo.y + (20 * (16 * 4)) < windowHeight || mago.y > (windowHeight / 2) - 32)
+    
+    if(tileInfo.y + (20 * (16 * 4)) < windowHeight || mago.y > (windowHeight / 2) + 32)
     {
         tileInfo.y = windowHeight - (20 * (16 * 4)); 
         mago.y -= (mago.y - magoPos.y);
+    }
+    
+    if(ChangeMap(mago.x, mago.y))
+    {
+        actualMap = &map1;
     }
 }
 
 void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
 {
     //DrawTexture(0, 0, &backgroundHeader, backgroundTexture, backBuffer);
-    DrawTileMapInt(map.bottomLayer, tileInfo, 4, tilesheetTexture, backBuffer);
+    DrawTileMapInt(10, 10, actualMap->bottomLayer, tileInfo, 4, tilesheetTexture, backBuffer);
     DrawFrameTexture(mago, magoScale, magoTexture, backBuffer);
-    DrawRect((mago.x + 20), (mago.y), 4, 4, 0xFFFF00FF, backBuffer);
-    DrawRect((mago.x + 40), (mago.y), 4, 4, 0xFFFF00FF, backBuffer);
-    DrawRect((mago.x + 20), (mago.y + 40), 4, 4, 0xFFFF00FF, backBuffer);
-    DrawRect((mago.x + 40), (mago.y + 40), 4, 4, 0xFFFF00FF, backBuffer);
-    DrawTileMapInt(map.topLayer, tileInfo, 4, tilesheetTexture, backBuffer);
+    //DrawRect((mago.x + 20), (mago.y), 4, 4, 0xFFFF00FF, backBuffer);
+    //DrawRect((mago.x + 40), (mago.y), 4, 4, 0xFFFF00FF, backBuffer);
+    //DrawRect((mago.x + 20), (mago.y + 40), 4, 4, 0xFFFF00FF, backBuffer);
+    //DrawRect((mago.x + 40), (mago.y + 40), 4, 4, 0xFFFF00FF, backBuffer);
+    DrawTileMapInt(10, 10, actualMap->topLayer, tileInfo, 4, tilesheetTexture, backBuffer);
     DrawString("POKEMON SOUL SILVER", 0, windowHeight - 16, fontTexture, backBuffer);
     DrawString("AGUANTE LUGIA PAPA", 0, windowHeight - 32, fontTexture, backBuffer);
     DrawString("HO OH SE LA COMEEE", 0, windowHeight - 48, fontTexture, backBuffer);
     DrawString("MANUTO", mago.x - 16, mago.y + 64, fontTexture, backBuffer);
-    ClearBackBuffer(0xFF004400, backBuffer, hwnd);
+    ClearBackBuffer(0xFF000000, backBuffer, hwnd);
 }
 
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 { 
     srand (time(NULL));
-
-    backgroundTexture = LoadBMP("./assets/test_background.bmp");
-    tilesheetTexture = LoadBMP("./assets/tilesheet.bmp");
-    magoTexture = LoadBMP("./assets/mago.bmp");
-    fontTexture = LoadBMP("./assets/font23.bmp");
 
     LARGE_INTEGER perfCountFrequency;
     QueryPerformanceFrequency(&perfCountFrequency);
