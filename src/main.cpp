@@ -4,6 +4,16 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef struct 
+{
+    rect_t sprite;
+    vec2_t offset;
+    float x;
+    float y;
+    int numFrames;
+    int scale;
+} player_t;
+
 texture_t backgroundTexture;
 texture_t magoTexture;
 texture_t tilesheetTexture;
@@ -11,23 +21,23 @@ texture_t fontTexture;
 
 uint32_t MSPerFrame;
 float timePass;
+float deltaTime;
+
 int windowWidth = 1024;
 int windowHeight = 576;
 
-// Player
-float magoIncX;
-float magoIncY;
-int magoNumFrames;
-int magoScale;
-vec2_t magoPos;
-rect_t mago;
+player_t mago;
+
+float tileXf;
+float tileYf;
 rect_t tileInfo;
+
 
 tileMap_t map0;
 tileMap_t map1;
 tileMap_t map2;
 tileMap_t* actualMap;
-int actualMapInt = 1;
+int actualMapInt;
 
 bool PlayerCanMove(int x, int y)
 {
@@ -109,103 +119,128 @@ int GetColitionsInt(int x, int y)
     return tile;
 }
 
+void MapHandler(float& x, float& y, float& tileXf, float& tileYf)
+{
+    if(ChangeMap(x, y))
+    { 
+        if(actualMapInt == 1)
+        {
+            if(GetColitionsInt(x, y) == 3)
+            {
+                actualMapInt = 3;
+                actualMap = &map2;
+                tileYf = 0;
+                y = 128;
+            }
+            else
+            {
+                actualMapInt = 2;
+                actualMap = &map1;
+                y = 64;
+                tileXf += 128;
+            }
+        }
+        else if(actualMapInt == 3)
+        {
+            actualMapInt = 1;
+            actualMap = &map0;
+            y = (windowHeight / 2) - 32;
+            tileYf = -383;
+        }
+        else if(actualMapInt == 2)
+        {
+            actualMapInt = 1;
+            actualMap = &map0;
+            y = windowHeight - 64;
+            tileXf -= 128;
+        } 
+    }
+}
 
 void Init(void)
 {
+    deltaTime = 0.0f;
+
     tilesheetTexture = LoadBMP("./assets/10x10.bmp");
     magoTexture = LoadBMP("./assets/mago.bmp");
     fontTexture = LoadBMP("./assets/font23.bmp");
 
-    mago.x = (windowWidth / 2) - 32;
-    mago.y = (windowHeight / 2) - 32;
-    mago.width = 16;
-    mago.height = 16;
-    mago.row = 0;
-    mago.column = 2;
-    magoIncX = 64;
-    magoIncY = 64;
-    magoScale = 4;
-    magoPos.x = (windowWidth / 2) - 32;
-    magoPos.y = (windowHeight / 2) - 32;
-    magoNumFrames = 1;
+    mago.sprite.x = (windowWidth / 2) - 32;
+    mago.sprite.y = (windowHeight / 2) - 32;
+    mago.offset.x = mago.sprite.x;
+    mago.offset.y = mago.sprite.y;
+    mago.x = mago.sprite.x;
+    mago.y = mago.sprite.y;
+
+    mago.sprite.width = 16;
+    mago.sprite.height = 16;
+    mago.sprite.row = 0;
+    mago.sprite.column = 2;
+    mago.scale = 4;
+    mago.numFrames = 1;
 
     tileInfo.x = 0;
     tileInfo.y = 0;
+    tileXf = tileInfo.x;
+    tileYf = tileInfo.y;
     tileInfo.width = 16;
     tileInfo.height = 16;
 
     LoadMapFromFile("./assets/maps/test1.map", &map0);
     LoadMapFromFile("./assets/maps/test2.map", &map1);
     LoadMapFromFile("./assets/maps/test3.map", &map2);
-    actualMap = &map0;
+    actualMap = &map1;
+    actualMapInt = 2;
 }
 
 void InputHandler(HWND hwnd)
 {
     Win32InputHandler(hwnd);
 
-    magoPos.x = mago.x;
-    magoPos.y = mago.y;
-    
-    magoIncX = magoPos.x;
-    magoIncY = magoPos.y;
-
-
-    if(KeyDown(0x31))
-    {
-        actualMap = &map0;
-    }
-    if(KeyDown(0x32))
-    {
-        actualMap = &map1;
-    }
-    if(KeyDown(0x33))
-    {
-        actualMap = &map2;
-    }
-
+    float magoIncX = mago.x;
+    float magoIncY = mago.y;
 
     if(KeyDown(VK_UP))
     {
-        magoIncY += 3.0f;
-        mago.column = 0;
-        magoNumFrames = 6;
+        magoIncY += 150 * deltaTime;
+        mago.sprite.column = 0;
+        mago.numFrames = 6;
     }   
     else if(KeyDown(VK_DOWN))
     {
-        magoIncY -= 3.0f;
-        mago.column = 1;
-        magoNumFrames = 6;
+        magoIncY -= 150 * deltaTime;
+        mago.sprite.column = 1;
+        mago.numFrames = 6;
     }
     else if(KeyDown(VK_RIGHT))
     {
-        magoIncX += 3.0f;
-        mago.column = 2;
-        magoNumFrames = 6;
+        magoIncX += 150 * deltaTime;
+        mago.sprite.column = 2;
+        mago.numFrames = 6;
     } 
     else if(KeyDown(VK_LEFT))
     {
-        magoIncX -= 3.0f;
-        mago.column = 3;
-        magoNumFrames = 6;
-    }
-
-    if(!KeyDown(VK_UP) && !KeyDown(VK_DOWN) && !KeyDown(VK_RIGHT) && !KeyDown(VK_LEFT))
-    {
-        magoNumFrames = 1;
+        magoIncX -= 150 * deltaTime; 
+        mago.sprite.column = 3;
+        mago.numFrames = 6;
     }
     
-    if(magoIncY + mago.height * magoScale >= windowHeight)
+    if(!KeyDown(VK_UP) && !KeyDown(VK_DOWN) && !KeyDown(VK_RIGHT) && !KeyDown(VK_LEFT))
     {
-        magoIncY = windowHeight - mago.height * magoScale;
+        mago.numFrames = 1;
+    }
+
+    if(magoIncY + mago.sprite.height * mago.scale >= windowHeight)
+    {
+        magoIncY = windowHeight - mago.sprite.height * mago.scale;
     }
     if(magoIncY <= 0)
     {
         magoIncY = 0;
     }
-    if(magoIncX + mago.width * magoScale >= windowWidth)
+    if(magoIncX + mago.sprite.width * mago.scale >= windowWidth)
     {
-        magoIncX = windowWidth - mago.width * magoScale;
+        magoIncX = windowWidth - mago.sprite.width * mago.scale;
     }
     if(magoIncX <= 0)
     {
@@ -214,87 +249,62 @@ void InputHandler(HWND hwnd)
 
     if(PlayerCanMove(magoIncX, magoIncY))
     {
-        magoPos.x = magoIncX;
-        magoPos.y = magoIncY;
+        mago.offset.x = (mago.x - magoIncX);
+        mago.offset.y = (mago.y - magoIncY);
     }
+    else
+    {
+        mago.offset.x = 0;
+        mago.offset.y = 0;
+    }    
 }
 
 void Update(void)
 {
-    mago.row = (int)timePass % magoNumFrames;
-     
-    tileInfo.x += (mago.x - magoPos.x);
-    tileInfo.y += (mago.y - magoPos.y);
-    if(tileInfo.x > 0 || mago.x < (windowWidth / 2) - 32)
-    {
-        tileInfo.x = 0;
-        mago.x -= (mago.x - magoPos.x); 
-    }
-    
-    if(tileInfo.x + (30 * (16 * 4)) < windowWidth || mago.x > (windowWidth / 2) + 32)
-    {
-        tileInfo.x = windowWidth - (30 * (16 * 4)); 
-        mago.x -= (mago.x - magoPos.x);
-    }
+    mago.sprite.row = (int)timePass % mago.numFrames;
 
-     
-    if(tileInfo.y > 0 || mago.y < (windowHeight / 2) - 32)
+    tileXf += mago.offset.x;
+    tileYf += mago.offset.y;
+
+    if(tileXf > 0 || mago.x < (windowWidth / 2) - 32)
     {
-        tileInfo.y = 0;
-        mago.y -= (mago.y - magoPos.y);
+        tileXf = 0;
+        mago.x -= mago.offset.x;
+    } 
+    if(tileXf + (30 * (16 * 4)) < windowWidth || mago.x > (windowWidth / 2) + 32)
+    {
+        tileXf = windowWidth - (30 * (16 * 4)); 
+        mago.x -= mago.offset.x;
+    }
+    if(tileYf > 0 || mago.y < (windowHeight / 2) - 32)
+    {
+        tileYf = 0;
+        mago.y-= mago.offset.y;
+    }
+    if(tileYf + (20 * (16 * 4)) < windowHeight || mago.y > (windowHeight / 2) + 32)
+    {
+        tileYf = windowHeight - (20 * (16 * 4)); 
+        mago.y -= mago.offset.y;
     }
     
-    if(tileInfo.y + (20 * (16 * 4)) < windowHeight || mago.y > (windowHeight / 2) + 32)
-    {
-        tileInfo.y = windowHeight - (20 * (16 * 4)); 
-        mago.y -= (mago.y - magoPos.y);
-    }
+    MapHandler(mago.x, mago.y, tileXf, tileYf);
     
-    if(ChangeMap(mago.x, mago.y))
-    { 
-        if(actualMapInt == 1)
-        {
-            if(GetColitionsInt(mago.x, mago.y) == 3)
-            {
-                actualMapInt = 3;
-                actualMap = &map2;
-                mago.y = 128;
-            }
-            else
-            {
-                actualMapInt = 2;
-                actualMap = &map1;
-                mago.y = 64;
-                tileInfo.x += 128;
-            }
-        }
-        else if(actualMapInt == 3)
-        {
-            actualMapInt = 1;
-            actualMap = &map0;
-            mago.y = (windowHeight / 2) - 32;
-            tileInfo.y = -384;
-        }
-        else if(actualMapInt == 2)
-        {
-            actualMapInt = 1;
-            actualMap = &map0;
-            mago.y = windowHeight - 64;
-            tileInfo.x -= 128;
-        } 
-    }
+    mago.sprite.x = mago.x;
+    mago.sprite.y = mago.y;
+    tileInfo.x = tileXf;
+    tileInfo.y = tileYf;
 }
 
 
 void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
 {
     DrawTileMapInt(10, 10, actualMap->bottomLayer, tileInfo, 4, tilesheetTexture, backBuffer);
-    DrawFrameTexture(mago, magoScale, magoTexture, backBuffer);
+    DrawFrameTexture(mago.sprite, mago.scale, magoTexture, backBuffer);
     DrawTileMapInt(10, 10, actualMap->topLayer, tileInfo, 4, tilesheetTexture, backBuffer);
     DrawString("POKEMON SOUL SILVER", 0, windowHeight - 16, fontTexture, backBuffer);
     DrawString("AGUANTE LUGIA PAPA", 0, windowHeight - 32, fontTexture, backBuffer);
     DrawString("HO OH SE LA COMEEE", 0, windowHeight - 48, fontTexture, backBuffer);
-    DrawString("MANUTO", mago.x - 16, mago.y + 64, fontTexture, backBuffer);
+    DrawString("MANUTO", mago.sprite.x - 16, mago.sprite.y + 64, fontTexture, backBuffer);
     ClearBackBuffer(0xFF000000, backBuffer, hwnd);
 }
 
@@ -316,8 +326,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         
         LARGE_INTEGER lastCounter;
         QueryPerformanceCounter(&lastCounter);
-
-        
+ 
         while(GetRunning())
         {
             InputHandler(hwnd);
@@ -326,13 +335,19 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
             LARGE_INTEGER endCounter;
             QueryPerformanceCounter(&endCounter);
-            // TODO: desplay value
+
             uint64_t counterElapsed =  endCounter.QuadPart - lastCounter.QuadPart;  
             MSPerFrame = (uint32_t)(((1000 * counterElapsed) / frequency));
-            timePass += (MSPerFrame / 40.0f);               
+            deltaTime = (counterElapsed / (float)frequency);
+            timePass += (MSPerFrame / 40.0);               
             lastCounter = endCounter;
         }
         VirtualFree(backBuffer->memory, 0, MEM_RELEASE);
     }
     return(0); 
 }
+
+
+
+
+
