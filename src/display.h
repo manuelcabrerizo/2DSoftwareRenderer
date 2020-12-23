@@ -12,6 +12,11 @@
 #define local_persist static 
 #define global_variable static
 
+#define windowWidth 1024
+#define windowHeight 576
+
+
+
 typedef struct
 {
     BITMAPINFO info;
