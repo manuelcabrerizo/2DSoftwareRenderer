@@ -300,6 +300,12 @@ void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
 {
     DrawTileMapInt(10, 10, actualMap->bottomLayer, tileInfo, 4, tilesheetTexture, backBuffer);
     DrawFrameTexture(mago.sprite, mago.scale, magoTexture, backBuffer);
+
+    DrawRect((mago.x + 20), (mago.y), 4, 4, 0xFFFF00FF, backBuffer);
+    DrawRect((mago.x + 40), (mago.y), 4, 4, 0xFFFF00FF, backBuffer);
+    DrawRect((mago.x + 20), (mago.y + 40), 4, 4, 0xFFFF00FF, backBuffer);
+    DrawRect((mago.x + 40), (mago.y + 40), 4, 4, 0xFFFF00FF, backBuffer);
+
     DrawTileMapInt(10, 10, actualMap->topLayer, tileInfo, 4, tilesheetTexture, backBuffer);
     DrawString("POKEMON SOUL SILVER", 0, windowHeight - 16, fontTexture, backBuffer);
     DrawString("AGUANTE LUGIA PAPA", 0, windowHeight - 32, fontTexture, backBuffer);
