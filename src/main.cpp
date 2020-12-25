@@ -10,7 +10,6 @@ uint32_t MSPerFrame;
 float timePass;
 float deltaTime;
 
-texture_t backgroundTexture;
 texture_t magoTexture;
 texture_t tilesheetTexture;
 texture_t fontTexture;
