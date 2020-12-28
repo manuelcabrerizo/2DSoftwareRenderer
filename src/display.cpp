@@ -413,6 +413,11 @@ void DrawLifeBar(rect_t sprite, int life, win32BackBuffer_t* backBuffer)
 {
 
     int actualWidth = life * sprite.width / 100;
+    uint32_t color = 0xFF00FF00;
+    if(life <= 50 && life > 25)
+        color = 0xFFFFFF00;
+    else if(life <= 25)
+        color = 0xFFFF0000;
 
     for(int x = sprite.x; x < sprite.x + sprite.width; x++)
     {
@@ -427,7 +432,7 @@ void DrawLifeBar(rect_t sprite, int life, win32BackBuffer_t* backBuffer)
     {
         for(int y = sprite.y; y < sprite.y + sprite.height; y++)
         {
-            DrawPixel(x, y, 0xFF00FF00, backBuffer);
+            DrawPixel(x, y, color, backBuffer);
         }
     }
 }
