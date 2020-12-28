@@ -21,6 +21,15 @@ bool PlayerCanMove(
         int tileInfoY,
         tileMap_t* actualMap
     );
+
+bool PlayerColitionEnemy(
+        int x,
+        int y,
+        int tileInfoX,
+        int tileInfoY,
+        tileMap_t* actualMap
+    );
+
 int GetColitionsInt(
         int x,
         int y,

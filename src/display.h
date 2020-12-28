@@ -65,6 +65,7 @@ typedef struct
     int bottomLayer[600];
     int topLayer[600];
     int colitions[600];
+    int enemyLayer[600];
 } tileMap_t;
 
 HWND Win32CreateWindow(const char* windowName, int width, int height, HINSTANCE hInstance);
@@ -84,6 +85,7 @@ void DrawFrameTexture(rect_t srcRect, int scale, texture_t texture, win32BackBuf
 void DrawTileMapInt(int columns, int rows, int tiles[], rect_t tileInfo, int scale, texture_t texture, win32BackBuffer_t* backBuffer);
 void DrawString(const char* message, int posX, int posY, texture_t texture, win32BackBuffer_t* backBuffer);
 void LoadMapFromFile(const char* filePath, tileMap_t* map);
+void DrawLifeBar(rect_t sprite, int life, win32BackBuffer_t* backBuffer);
 
 
 #endif

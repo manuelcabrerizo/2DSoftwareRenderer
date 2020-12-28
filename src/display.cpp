@@ -1,7 +1,6 @@
 #include "display.h"
 
 global_variable win32BackBuffer_t backBuffer;
-
 global_variable bool running;
 
 LRESULT CALLBACK Win32WindowProc(
@@ -227,8 +226,13 @@ void DrawTextureScale(int xPos, int yPos, int scale, texture_t texture, win32Bac
     {
         int y1 = 0;
         for(int y = yPos; y < yPos + texture.height * scale; y += scale)
-        { 
-            DrawRect(x, y, scale, scale, (uint32_t)texture.pixels[(y1 * texture.width) + x1], backBuffer);
+        {
+            uint32_t pixel = (uint32_t)texture.pixels[(y1 * texture.width) + x1];
+            uint8_t a = (uint8_t)(pixel >> 24);   
+            if(a > 128)
+            {
+                DrawRect(x, y, scale, scale, (uint32_t)texture.pixels[(y1 * texture.width) + x1], backBuffer);
+            }
             y1++;
         }
         x1++;
@@ -402,5 +406,29 @@ void LoadMapFromFile(const char* filePath, tileMap_t* map)
         printf("cannot read the file %s\n", filePath);
     }
     fclose(file);
+}
+
+
+void DrawLifeBar(rect_t sprite, int life, win32BackBuffer_t* backBuffer)
+{
+
+    int actualWidth = life * sprite.width / 100;
+
+    for(int x = sprite.x; x < sprite.x + sprite.width; x++)
+    {
+        for(int y = sprite.y; y < sprite.y + sprite.height; y++)
+        {
+            DrawPixel(x, y, 0xFFDDDDDD, backBuffer);
+        }
+    }
+
+
+    for(int x = sprite.x; x < sprite.x + actualWidth; x++)
+    {
+        for(int y = sprite.y; y < sprite.y + sprite.height; y++)
+        {
+            DrawPixel(x, y, 0xFF00FF00, backBuffer);
+        }
+    }
 }
 
