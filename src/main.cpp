@@ -1,6 +1,5 @@
 #include "display.h"
 #include <stdlib.h>     
-#include <time.h>
 #include <stdio.h>
 #include <string.h>
 #include "playState.h"
@@ -36,7 +35,7 @@ void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 { 
-    srand (time(NULL));
+    
 
     LARGE_INTEGER perfCountFrequency;
     QueryPerformanceFrequency(&perfCountFrequency);

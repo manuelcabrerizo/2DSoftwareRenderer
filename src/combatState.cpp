@@ -1,4 +1,5 @@
 #include "combatState.h"
+#include <time.h>
 
 global_variable texture_t magoTexture;
 global_variable texture_t fontTexture;
@@ -57,6 +58,8 @@ void CombatStateInit()
     UpWasPress = false;
     DownWasPress = false;
 
+    srand (time(NULL));
+
 }
 
 void CombatStateInput(float deltaTime, float timePass)
@@ -85,7 +88,6 @@ void CombatStateInput(float deltaTime, float timePass)
             DownWasPress = false;
         }
 
-
         if(KeyDown(0x0D))
         {
             if(inputOption == 1)
@@ -107,7 +109,14 @@ void CombatStateUpdate(float deltaTime, float timePass)
     { 
         float currentTime  = timePass - timer;
         if(currentTime > 40.0f)
-        {
+        { 
+            int option = (rand() % 3) + 1;
+            if(option == 1)
+                lifeBar.life -= fireBall;
+            else if(option == 2)
+                lifeBar.life -= iceBall;
+            else if(option == 3) 
+                lifeBar.life -= arcanWall;
             youTurn = 1;
         }
     }
