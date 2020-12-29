@@ -30,6 +30,6 @@ void MapHandler(
 
 void SetMapa(tileMap_t& map, int index);
 tileMap_t GetMap(int index);
-
+void SetEnemyAlive(int x, int y, int tileInfoX, int tileInfoY, tileMap_t* actualMap, int value);
 
 #endif

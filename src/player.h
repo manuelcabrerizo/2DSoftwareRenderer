@@ -11,7 +11,17 @@ typedef struct
     float y;
     int numFrames;
     int scale;
+    stats_t stats;
+    const char* movesNames[4];
+    int movesPower[4];
 } player_t;
+
+typedef struct 
+{
+    stats_t stats;
+    const char* movesNames[4];
+    int movesPower[4];
+} enemy_t;
 
 
 bool PlayerCanMove(

@@ -7,9 +7,22 @@
 global_variable uint32_t MSPerFrame;
 global_variable float timePass;
 global_variable float deltaTime;
+global_variable float timer;
+global_variable texture_t logoTexture;
+
+enum global_state_t {
+    INTRO,
+    MENU,
+    PLAY
+};
+
+global_variable global_state_t state;
 
 void Init(void)
 {
+    logoTexture = LoadBMP("./assets/logo.bmp");
+    timer = timePass;
+    state = INTRO;
     deltaTime = 0.0f;
     PlayStateInit(); 
 }
@@ -22,21 +35,33 @@ void InputHandler(HWND hwnd)
 
 void Update(void)
 {
-    PlayStateUpdate(deltaTime, timePass);
+    if(state == INTRO)
+    {
+        float currentTime  = timePass - timer;
+            if(currentTime > 160.0f)
+            {
+                state = PLAY;
+            }
+    }
+
+    if(state == PLAY)
+        PlayStateUpdate(deltaTime, timePass);
 }
 
 
 void Render(win32BackBuffer_t* backBuffer, HWND hwnd)
 {
-    PlayStateRender(backBuffer);
+    if(state == INTRO)
+        DrawTextureScale(windowWidth / 2 - (16*8), windowHeight / 2 - (16*8), 8, logoTexture,backBuffer);
+    if(state == PLAY)
+        PlayStateRender(backBuffer);
+
     ClearBackBuffer(0xFF000000, backBuffer, hwnd);
 }
 
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 { 
-    
-
     LARGE_INTEGER perfCountFrequency;
     QueryPerformanceFrequency(&perfCountFrequency);
     uint64_t frequency = (uint64_t)perfCountFrequency.QuadPart;

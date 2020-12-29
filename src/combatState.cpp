@@ -1,4 +1,6 @@
 #include "combatState.h"
+#include "worldState.h"
+#include "tileMap.h"
 #include <time.h>
 
 global_variable texture_t magoTexture;
@@ -20,20 +22,8 @@ global_variable float timer;
 global_variable bool UpWasPress;
 global_variable bool DownWasPress;
 
-
-void CombatStateInit()
+void SetSprites()
 {
-    arenaTexture = LoadBMP("./assets/arena.bmp");
-    enemyCombatTexture = LoadBMP("./assets/enemyCombat.bmp");
-    magoTexture = LoadBMP("./assets/mago.bmp");
-    fontTexture = LoadBMP("./assets/font23.bmp");
-
-    inputOption = 1;
-
-    fireBall = 20;
-    iceBall = 10;
-    arcanWall = 1;
-
     lifeBar.sprite.x = 32 + 550;
     lifeBar.sprite.y = 256;
     lifeBar.sprite.width = 252;
@@ -52,17 +42,31 @@ void CombatStateInit()
     magoCombat.height = 16;
     magoCombat.column = 2;
     magoCombat.row = 0;
+}
 
+
+void CombatStateInit(player_t* mago)
+{
+    //Set Up Code
+    arenaTexture = LoadBMP("./assets/arena.bmp");
+    enemyCombatTexture = LoadBMP("./assets/enemyCombat.bmp");
+    magoTexture = LoadBMP("./assets/mago.bmp");
+    fontTexture = LoadBMP("./assets/font23.bmp");
+    SetSprites();
+    inputOption = 1;
     youTurn = 1;
     timer = 0.0f;
     UpWasPress = false;
     DownWasPress = false;
-
     srand (time(NULL));
-
+    lifeBar.life = (mago->stats.hp_now * 100) / mago->stats.hp_max;
+    
+    fireBall = 20;
+    iceBall = 10;
+    arcanWall = 1;
 }
 
-void CombatStateInput(float deltaTime, float timePass)
+void CombatStateInput(float deltaTime, float timePass, player_t* mago)
 {
     if(youTurn == 1)
     {
@@ -74,7 +78,7 @@ void CombatStateInput(float deltaTime, float timePass)
         }
         else if(KeyDown(VK_DOWN) && DownWasPress == false)
         {
-            if(inputOption < 3)
+            if(inputOption < 4)
                 inputOption++;
             DownWasPress = true;
         }
@@ -91,11 +95,13 @@ void CombatStateInput(float deltaTime, float timePass)
         if(KeyDown(0x0D))
         {
             if(inputOption == 1)
-                lifeBar2.life -= fireBall;
+                lifeBar2.life -= mago->movesPower[0];
             if(inputOption == 2)
-                lifeBar2.life -= iceBall;
+                lifeBar2.life -= mago->movesPower[1];
             if(inputOption == 3)
-                lifeBar2.life -= arcanWall;
+                lifeBar2.life -= mago->movesPower[2];
+            if(inputOption == 4)
+                lifeBar2.life -= mago->movesPower[3];
 
             youTurn = 0; 
             timer = timePass;
@@ -103,7 +109,7 @@ void CombatStateInput(float deltaTime, float timePass)
     }
 }
 
-void CombatStateUpdate(float deltaTime, float timePass)
+void CombatStateUpdate(float deltaTime, float timePass, player_t* mago, state_t* gameState)
 {
     if(youTurn == 0)
     { 
@@ -112,18 +118,26 @@ void CombatStateUpdate(float deltaTime, float timePass)
         { 
             int option = (rand() % 3) + 1;
             if(option == 1)
-                lifeBar.life -= fireBall;
+                mago->stats.hp_now -= fireBall;
             else if(option == 2)
-                lifeBar.life -= iceBall;
+                mago->stats.hp_now -= iceBall;
             else if(option == 3) 
-                lifeBar.life -= arcanWall;
+                mago->stats.hp_now -= arcanWall;
+
+            lifeBar.life = (mago->stats.hp_now * 100) / mago->stats.hp_max;
             youTurn = 1;
         }
     }
 
+    if(lifeBar2.life <= 0)
+    {
+        KillEnemy(mago);
+        *gameState = WORLD;
+    }
+
 }
 
-void CombatStateRender(win32BackBuffer_t* backBuffer)
+void CombatStateRender(win32BackBuffer_t* backBuffer, player_t* mago)
 {
     DrawTexture(0, 0, arenaTexture, backBuffer);
     DrawFrameTexture(magoCombat, 8, magoTexture, backBuffer);
@@ -144,11 +158,15 @@ void CombatStateRender(win32BackBuffer_t* backBuffer)
     {
         DrawRect(32 + 550, 232 - 48, 288 - 64, 16, 0xFFFFFF99, backBuffer);
     }
+    else if(inputOption == 4)
+    {
+        DrawRect(32 + 550, 232 - 72, 288 - 64, 16, 0xFFFFFF99, backBuffer);
+    }
 
-    DrawString("FIREBALL", 32 + 550, 232, fontTexture, backBuffer);
-    DrawString("ICEBALL", 32 + 550, 232 - 24, fontTexture, backBuffer);
-    DrawString("ARCAN WALL", 32 + 550, 232 - 48, fontTexture, backBuffer);
-
+    DrawString(mago->movesNames[0], 32 + 550, 232, fontTexture, backBuffer);
+    DrawString(mago->movesNames[1], 32 + 550, 232 - 24, fontTexture, backBuffer);
+    DrawString(mago->movesNames[2], 32 + 550, 232 - 48, fontTexture, backBuffer);
+    DrawString(mago->movesNames[3], 32 + 550, 232 - 72, fontTexture, backBuffer);
     
     DrawRect(40, 484, 320, 64, 0xFFFFFFFF, backBuffer);
     DrawLifeBar(lifeBar2.sprite, lifeBar2.life, backBuffer);

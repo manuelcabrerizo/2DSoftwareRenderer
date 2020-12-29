@@ -15,7 +15,15 @@
 #define windowWidth 1024
 #define windowHeight 576
 
-
+typedef struct 
+{
+    int hp_now;
+    int hp_max;
+    int mp_now;
+    int mp_max;
+    int strong;
+    int defense;
+} stats_t;
 
 typedef struct
 {
