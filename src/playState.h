@@ -2,13 +2,8 @@
 #define PLAYSTATE_H
 #include "display.h"
 
-enum state_t {
-    WORLD,
-    COMBAT
-};
-
 void PlayStateInit();
-void PlayStateInput(float deltaTime, float timePass);
+void PlayStateInput(float deltaTime, float timePass, global_state_t* state);
 void PlayStateUpdate(float deltaTime, float timePass);
 void PlayStateRender(win32BackBuffer_t* backBuffer);
 void PlayStateClear();

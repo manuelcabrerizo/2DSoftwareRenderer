@@ -286,6 +286,11 @@ bool GetRunning(void)
     return running;
 }
 
+void SetRunning(bool value)
+{
+    running = value;
+}
+
 win32BackBuffer_t* CreateBackBuffer(void)
 {
     return &backBuffer;

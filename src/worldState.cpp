@@ -28,8 +28,8 @@ void WorldStateInit(player_t* mago)
     
     mago->sprite.x = (windowWidth / 2) - 32;
     mago->sprite.y = (windowHeight / 2) - 32;
-    mago->offset.x = mago->sprite.x;
-    mago->offset.y = mago->sprite.y;
+    mago->offset.x = 0;
+    mago->offset.y = 0;
     mago->x = mago->sprite.x;
     mago->y = mago->sprite.y;
     mago->sprite.width = 16;
@@ -71,6 +71,7 @@ void WorldStateInit(player_t* mago)
 
 void WorldStateInput(float deltaTime, player_t* mago)
 {
+    
     float magoIncX = mago->x;
     float magoIncY = mago->y;
 
@@ -131,10 +132,12 @@ void WorldStateInput(float deltaTime, player_t* mago)
         mago->offset.x = 0;
         mago->offset.y = 0;
     } 
+    
 }
 
 void WorldStateUpdate(float deltaTime, float timePass, player_t* mago, state_t* gameState)
 {
+    
     mago->sprite.row = (int)timePass % mago->numFrames;
 
     mapData.x += mago->offset.x;
@@ -168,13 +171,10 @@ void WorldStateUpdate(float deltaTime, float timePass, player_t* mago, state_t* 
         *gameState = COMBAT;  
     }
 
-        
-
-    
     mago->sprite.x = mago->x;
     mago->sprite.y = mago->y;
     mapData.sprite.x = mapData.x;
-    mapData.sprite.y = mapData.y;
+    mapData.sprite.y = mapData.y; 
 }
 
 void WorldStateRender(win32BackBuffer_t* backBuffer, player_t* mago)

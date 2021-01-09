@@ -76,6 +76,18 @@ typedef struct
     int enemyLayer[600];
 } tileMap_t;
 
+enum global_state_t {
+    INTRO,
+    MENU,
+    PLAY
+};
+
+enum state_t {
+    WORLD,
+    COMBAT,
+    PAUSE
+};
+
 HWND Win32CreateWindow(const char* windowName, int width, int height, HINSTANCE hInstance);
 void Win32InputHandler(HWND hwnd);
 void Win32SetBackBuffer(win32BackBuffer_t* backBuffer, HWND hwnd);
@@ -84,6 +96,7 @@ void Win32ClearBackBuffer(uint32_t color, win32BackBuffer_t* backBuffer);
 void ClearBackBuffer(uint32_t color ,win32BackBuffer_t* backBuffer, HWND hwnd);
 void DrawPixel(int x, int y, uint32_t color, win32BackBuffer_t* backBuffer);
 bool GetRunning(void);
+void SetRunning(bool value);
 win32BackBuffer_t* CreateBackBuffer(void);
 texture_t LoadBMP(const char* filename);
 void DrawRect(int xPos, int yPos, int width, int height, uint32_t color, win32BackBuffer_t* backBuffer);
