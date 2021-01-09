@@ -1,5 +1,6 @@
 #include "pauseState.h"
 #include "menuState.h"
+#include "combatState.h"
 
 global_variable texture_t resumeButtonTexture;
 global_variable texture_t menuButtonTexture;
@@ -34,7 +35,7 @@ void PauseStateInit()
     DownWasPress = false;
 }
 
-void PauseStateInput(float deltaTime, float timePass, global_state_t* state, state_t* gameState)
+void PauseStateInput(float deltaTime, float timePass, global_state_t* state, state_t* gameState, state_t lastState)
 {
     if(KeyDown(VK_UP) && UpWasPress == false)
     {
@@ -61,12 +62,20 @@ void PauseStateInput(float deltaTime, float timePass, global_state_t* state, sta
     if(KeyDown(0x0D))
     {
         if(inputOption == 1)
-                *gameState = WORLD;       
+        {
+            if(lastState == WORLD)
+                *gameState = WORLD;
+            if(lastState == COMBAT)
+            { 
+                *gameState = COMBAT;
+            }
+        }       
         if(inputOption == 2)
         {
             MenuStateReset();
             *state = MENU;
         }
+        SetEnterWasPress(true);
     }
 }
 

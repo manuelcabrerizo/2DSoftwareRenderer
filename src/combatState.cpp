@@ -21,6 +21,12 @@ global_variable int youTurn;
 global_variable float timer;
 global_variable bool UpWasPress;
 global_variable bool DownWasPress;
+global_variable bool EnterWasPress;
+
+void SetEnterWasPress(bool value)
+{
+    EnterWasPress = value;
+}
 
 void SetSprites()
 {
@@ -53,11 +59,12 @@ void CombatStateInit(player_t* mago)
     magoTexture = LoadBMP("./assets/mago.bmp");
     fontTexture = LoadBMP("./assets/font23.bmp");
     SetSprites();
-    inputOption = 1;
+    inputOption = 0;
     youTurn = 1;
     timer = 0.0f;
     UpWasPress = false;
     DownWasPress = false;
+    EnterWasPress = false;
     srand (time(NULL));
     lifeBar.life = (mago->stats.hp_now * 100) / mago->stats.hp_max;
     
@@ -92,7 +99,7 @@ void CombatStateInput(float deltaTime, float timePass, player_t* mago)
             DownWasPress = false;
         }
 
-        if(KeyDown(0x0D))
+        if(KeyDown(0x0D) && EnterWasPress == false)
         {
             if(inputOption == 1)
                 lifeBar2.life -= mago->movesPower[0];
@@ -105,6 +112,12 @@ void CombatStateInput(float deltaTime, float timePass, player_t* mago)
 
             youTurn = 0; 
             timer = timePass;
+            EnterWasPress = true;
+        }
+
+        if(KeyUp(0x0D) && EnterWasPress == true)
+        {
+            EnterWasPress = false;
         }
     }
 }
@@ -170,6 +183,11 @@ void CombatStateRender(win32BackBuffer_t* backBuffer, player_t* mago)
     
     DrawRect(40, 484, 320, 64, 0xFFFFFFFF, backBuffer);
     DrawLifeBar(lifeBar2.sprite, lifeBar2.life, backBuffer);
+}
+
+void SetInputOption(int option)
+{
+    inputOption = option;
 }
 
 void CombatStateClear()

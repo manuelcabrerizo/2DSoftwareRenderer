@@ -25,6 +25,11 @@ void PlayStateInput(float deltaTime, float timePass, global_state_t* state)
     {
         if(gameState != PAUSE)
             lastState = gameState;
+        if(gameState == COMBAT)
+        {
+            SetInputOption(0);
+        }
+
         gameState = PAUSE;
     }
 
@@ -40,7 +45,7 @@ void PlayStateInput(float deltaTime, float timePass, global_state_t* state)
 
     if(gameState == PAUSE)
     {
-        PauseStateInput(deltaTime, timePass, state, &gameState);
+        PauseStateInput(deltaTime, timePass, state, &gameState, lastState);
     }
 }
 

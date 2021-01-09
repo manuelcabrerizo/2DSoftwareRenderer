@@ -16,6 +16,8 @@ void CombatStateUpdate(float deltaTime, float timePass, player_t* mago, state_t*
 void CombatStateRender(win32BackBuffer_t* backBuffer, player_t* mago);
 void CombatStateClear();
 void SetEnemyAlive(int* enemyAlive);
+void SetInputOption(int option);
+void SetEnterWasPress(bool value);
 
 
 #endif
