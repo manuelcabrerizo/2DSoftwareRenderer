@@ -4,21 +4,27 @@
 #include "pauseState.h"
 
 global_variable state_t gameState;
+global_variable state_t lastState;
 global_variable player_t mago;
 global_variable enemy_t enemy[6];
 global_variable enemy_t* actualEnemy;
+
+
 
 void PlayStateInit()
 {
     PauseStateInit();
     WorldStateInit(&mago); 
     gameState = WORLD;
+    lastState = gameState;
 }
 
 void PlayStateInput(float deltaTime, float timePass, global_state_t* state)
 {
-    if(KeyDown(0x1B))
+    if(KeyUp(0x1B))
     {
+        if(gameState != PAUSE)
+            lastState = gameState;
         gameState = PAUSE;
     }
 
@@ -69,6 +75,10 @@ void PlayStateRender(win32BackBuffer_t* backBuffer)
     }
     if(gameState == PAUSE)
     {
+        if(lastState == WORLD)
+            WorldStateRender(backBuffer, &mago); 
+        if(lastState == COMBAT)
+            CombatStateRender(backBuffer, &mago);
         PauseStateRender(backBuffer);
     }
 }
