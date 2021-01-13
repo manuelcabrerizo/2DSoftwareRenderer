@@ -58,6 +58,7 @@ void CombatStateInit(player_t* mago)
     enemyCombatTexture = LoadBMP("./assets/enemyCombat.bmp");
     magoTexture = LoadBMP("./assets/mago.bmp");
     fontTexture = LoadBMP("./assets/font23.bmp");
+
     SetSprites();
     inputOption = 0;
     youTurn = 1;

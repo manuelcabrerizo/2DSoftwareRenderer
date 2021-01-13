@@ -7,6 +7,8 @@ global_variable texture_t magoTexture;
 global_variable texture_t tilesheetTexture;
 global_variable texture_t fontTexture;
 global_variable texture_t enemyTexture;
+global_variable texture_t indiaTexture;
+global_variable texture_t lolaTexture;
 
 global_variable bool showColitions = false;
 global_variable tileMapData_t mapData;
@@ -21,10 +23,13 @@ void KillEnemy(player_t* mago)
 void WorldStateInit(player_t* mago)
 {
     showColitions = false;
-    tilesheetTexture = LoadBMP("./assets/10x10.bmp");
+    tilesheetTexture = LoadBMP("./assets/xiomiExperimento.bmp");
+    //tilesheetTexture = LoadBMP("./assets/10x10.bmp");
     magoTexture = LoadBMP("./assets/mago.bmp");
     fontTexture = LoadBMP("./assets/font23.bmp");
     enemyTexture = LoadBMP("./assets/enemy.bmp");
+    indiaTexture = LoadBMP("./assets/india2.bmp");
+    lolaTexture = LoadBMP("./assets/lola2.bmp");
     
     mago->sprite.x = (windowWidth / 2) - 32;
     mago->sprite.y = (windowHeight / 2) - 32;
@@ -181,6 +186,9 @@ void WorldStateRender(win32BackBuffer_t* backBuffer, player_t* mago)
 {
     DrawTileMapInt(10, 10, actualMap.bottomLayer, mapData.sprite, 4, tilesheetTexture, backBuffer);
     DrawFrameTexture(mago->sprite, mago->scale, magoTexture, backBuffer);
+    //India y Lola
+        DrawTileMapInt(2, 2, actualMap.indiaLayer, mapData.sprite, 4, indiaTexture, backBuffer);
+        DrawTileMapInt(2, 2, actualMap.lolaLayer, mapData.sprite, 4, lolaTexture, backBuffer);
     DrawTileMapInt(10, 10, actualMap.topLayer, mapData.sprite, 4, tilesheetTexture, backBuffer);
     if(showColitions)
         DrawTileMapInt(10, 10, actualMap.colitions, mapData.sprite, 4, tilesheetTexture, backBuffer);

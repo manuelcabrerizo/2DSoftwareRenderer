@@ -74,6 +74,8 @@ typedef struct
     int topLayer[600];
     int colitions[600];
     int enemyLayer[600];
+    int indiaLayer[600];
+    int lolaLayer[600];
 } tileMap_t;
 
 enum global_state_t {

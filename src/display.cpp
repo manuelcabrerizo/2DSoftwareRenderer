@@ -63,6 +63,7 @@ HWND Win32CreateWindow(const char* windowName, int width, int height, HINSTANCE 
     wc.lpfnWndProc = Win32WindowProc;
     wc.hInstance = hInstance;
     wc.lpszClassName = windowName;
+    wc.hCursor = LoadCursor(0, IDC_ARROW);
 
     // TODO: Create the window.
     HWND hwnd;
@@ -316,6 +317,8 @@ void DrawTileMapInt(int columns, int rows, int tiles[], rect_t tileInfo, int sca
         }
     }    
 }
+
+
 
 
 
