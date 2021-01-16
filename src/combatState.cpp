@@ -50,15 +50,17 @@ void SetSprites()
     magoCombat.row = 0;
 }
 
-
-void CombatStateInit(player_t* mago)
+void CombatStateSetTexture()
 {
-    //Set Up Code
     arenaTexture = LoadBMP("./assets/arena.bmp");
     enemyCombatTexture = LoadBMP("./assets/enemyCombat.bmp");
     magoTexture = LoadBMP("./assets/mago.bmp");
     fontTexture = LoadBMP("./assets/font23.bmp");
+}
 
+void CombatStateInit(player_t* mago)
+{
+    //Set Up Code
     SetSprites();
     inputOption = 0;
     youTurn = 1;

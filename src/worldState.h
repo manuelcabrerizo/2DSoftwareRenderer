@@ -5,6 +5,7 @@
 #include "player.h"
 #include "playState.h"
 
+void WorldStateSetTexture();
 void WorldStateInit(player_t* mago);
 void WorldStateInput(float deltaTime, player_t* mago);
 void WorldStateUpdate(float deltaTime, float timePass, player_t* mago, state_t* gameState);

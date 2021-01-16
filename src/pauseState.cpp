@@ -11,11 +11,14 @@ global_variable int inputOption;
 global_variable bool UpWasPress;
 global_variable bool DownWasPress;
 
-void PauseStateInit()
+void PauseStateSetTexture()
 {
     resumeButtonTexture = LoadBMP("./assets/ResumeButton.bmp");
     menuButtonTexture = LoadBMP("./assets/MenuButton.bmp");
+}
 
+void PauseStateInit()
+{
     resumeButton.x = (windowWidth / 2) - 16*6;
     resumeButton.y = (windowHeight / 2);
     resumeButton.width = 32;

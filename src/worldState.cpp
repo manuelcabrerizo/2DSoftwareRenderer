@@ -20,9 +20,9 @@ void KillEnemy(player_t* mago)
 {
     SetEnemyAlive(mago->x, mago->y, mapData.x, mapData.y, &actualMap, 0);
 }
-void WorldStateInit(player_t* mago)
+
+void WorldStateSetTexture()
 {
-    showColitions = false;
     tilesheetTexture = LoadBMP("./assets/xiomiExperimento.bmp");
     //tilesheetTexture = LoadBMP("./assets/10x10.bmp");
     magoTexture = LoadBMP("./assets/mago.bmp");
@@ -30,6 +30,11 @@ void WorldStateInit(player_t* mago)
     enemyTexture = LoadBMP("./assets/enemy.bmp");
     indiaTexture = LoadBMP("./assets/india2.bmp");
     lolaTexture = LoadBMP("./assets/lola2.bmp");
+}
+
+void WorldStateInit(player_t* mago)
+{
+    showColitions = false;
     
     mago->sprite.x = (windowWidth / 2) - 32;
     mago->sprite.y = (windowHeight / 2) - 32;

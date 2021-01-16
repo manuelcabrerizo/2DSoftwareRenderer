@@ -16,6 +16,8 @@ global_variable global_state_t state;
 void Init(void)
 {
     logoTexture = LoadBMP("./assets/logo.bmp");
+    MenuStateSetTexture();
+    PlayStateSetTexture();
     timer = timePass;
     state = INTRO;
     deltaTime = 0.0f;

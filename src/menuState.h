@@ -2,6 +2,8 @@
 #define MENUSTATE_H
 #include "display.h"
 
+
+void MenuStateSetTexture();
 void MenuStateInit();
 void MenuStateInput(float deltaTime, float timePass, global_state_t* state);
 void MenuStateUpdate(float deltaTime, float timePass);

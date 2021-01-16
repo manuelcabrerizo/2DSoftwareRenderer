@@ -12,11 +12,15 @@ global_variable int inputOption;
 global_variable bool UpWasPress;
 global_variable bool DownWasPress;
 
-void MenuStateInit()
+void MenuStateSetTexture()
 {
     playButtonTexture = LoadBMP("./assets/PlayButton.bmp");
     exitButtonTexture = LoadBMP("./assets/ExitButton.bmp");
     backTexture = LoadBMP("./assets/backGround.bmp");
+}
+
+void MenuStateInit()
+{
 
     playButton.x = (windowWidth / 2) - 16*6;
     playButton.y = (windowHeight / 2);

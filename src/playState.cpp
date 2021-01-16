@@ -9,7 +9,12 @@ global_variable player_t mago;
 global_variable enemy_t enemy[6];
 global_variable enemy_t* actualEnemy;
 
-
+void PlayStateSetTexture()
+{
+    WorldStateSetTexture();
+    CombatStateSetTexture();
+    PauseStateSetTexture();
+}
 
 void PlayStateInit()
 {
